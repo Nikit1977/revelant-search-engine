@@ -1,0 +1,15 @@
+{
+  "config": {
+    "name": "SkillboxSearchEngine",
+    "version": "0.1",
+    "last_update": "09.13.2022",
+    "update_freq_day": 1,
+    "max_responses": 5
+  },
+  "files": [
+    "../resources/file001.txt",
+    "../resources/file002.txt",
+    "../resources/file003.txt",
+    "../resources/file004.txt"
+  ]
+}
