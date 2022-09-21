@@ -1,37 +1,46 @@
 cmake_minimum_required(VERSION 3.23)
-project(search_engine VERSION 0.1)
 
+project(search_engine VERSION 0.1.2)
+
+#config version file
+configure_file(includes/version.h.in version.h @ONLY)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+#sets for autogen
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+add_executable(${PROJECT_NAME} main.cpp src/ConverterJSON.cpp src/InvertedIndex.cpp includes/ConfigErrorExceptions.h)
 
-set(Boost_INCLUDE_DIR "C:\\MY_programming\\boost_1_79_0")
-set(Boost_LIBRARY_DIR "C:\\MY_programming\\boost_1_79_0\\stage\\lib\\cmake")
+#include Boost
+#BOOST_ROOT set as SYSTEM Environment Variable (e.g. C:\Boost_1_80_0)
+find_package(Boost 1.80.0 REQUIRED COMPONENTS system json)
 
-include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRIARY_DIR})
-
-find_package(Boost 1.79 REQUIRED)
-
+#include Qt5
 set(CMAKE_PREFIX_PATH "C:/Qt5/5.15.2/mingw81_64/lib/cmake")
 find_package(Qt5 COMPONENTS
         Core
         Gui
         Widgets
         REQUIRED)
+#headers path
+include_directories(${Boost_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes)
 
-include_directories(includes)
-add_executable(search_engine main.cpp)
-add_library(classes STATIC src/ConverterJSON.cpp src/InvertedIndex.cpp)
-
-target_link_libraries(search_engine
+#linking
+target_link_libraries(${PROJECT_NAME}
         Qt5::Core
         Qt5::Gui
         Qt5::Widgets
-        classes
+        Boost::system
+        Boost::json
         )
+
+if (MINGW)
+    target_link_libraries(${PROJECT_NAME} ws2_32)
+endif()
 
 add_subdirectory(Google_tests)
 

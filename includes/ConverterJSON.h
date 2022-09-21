@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include <boost/json.hpp>
 
 class ConverterJSON {
 public:
@@ -37,13 +38,16 @@ public:
 */
     void putAnswers(std::vector<std::vector<std::pair<int, float>>>
                     answers);
+    /**
+     * Проверка наличия файла config.son, и ключа config в нем
+     */
     void testConfigFile();
 private:
 
 
     bool testRequestsFile();
 
-    bool getConfigData();
+    bool getConfigData(boost::json::object source);
 
     const char* config_file = "..\\config.json";
     const char* requests_file = "..\\requests.json";
