@@ -7,12 +7,12 @@ configure_file(includes/version.h.in version.h @ONLY)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 #sets for autogen
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-add_executable(${PROJECT_NAME} main.cpp src/ConverterJSON.cpp src/InvertedIndex.cpp includes/ConfigErrorExceptions.h)
+add_executable(${PROJECT_NAME} main.cpp src/ConverterJSON.cpp src/InvertedIndex.cpp)
 
 #include Boost
 #BOOST_ROOT set as SYSTEM Environment Variable (e.g. C:\Boost_1_80_0)

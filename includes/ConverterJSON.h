@@ -2,13 +2,15 @@
 #ifndef SEARCH_ENGINE_CONVERTERJSON_H
 #define SEARCH_ENGINE_CONVERTERJSON_H
 
-
-
 #include <string>
 #include <vector>
 
 #include <boost/json.hpp>
-
+/**
+ * Класс с предустановленными названиями исходных и результирующих файлов и путями к ним
+ * (по умолчанию расположенных в корневой папке проекта),
+ * предоставляющий методы для обработки данных файлов (чтение, проверка и запись результатов)
+ */
 class ConverterJSON {
 public:
     ConverterJSON() = default;
@@ -23,7 +25,7 @@ public:
 /**
 * Метод считывает поле max_responses для определения предельного
 * количества ответов на один запрос
-* @return
+* @return возвращает число запросов, указанное в config.json (по умолчанию - 5)
 */
     int GetResponsesLimit();
 
@@ -36,22 +38,72 @@ public:
 /**
 * Положить в файл answers.json результаты поисковых запросов
 */
-    void putAnswers(std::vector<std::vector<std::pair<int, float>>>
-                    answers);
+    void putAnswers(std::vector<std::vector<std::pair<int, float>>> answers);
+
     /**
-     * Проверка наличия файла config.son, и ключа config в нем
+     * Вызывает проверочные методы, каждый из которых способен вызвать исключение, не допускающее запуск программы
+     * Проверка наличия файла config.json, и параметров, требуемых программе (name, version, path и пр.)
      */
     void testConfigFile();
+
 private:
 
+    /**
+     * Вспомогательный метод. Доступ к версии программы
+     * @return PROJECT_VERSION from CMakeLists.txt
+     */
+    const char *getEngineVersion();
+
+    /**
+     * Вспомогательный метод. Доступ версии для программы из прочитанного config.json
+     * @return value from - ["config/version"]
+     */
+    const char *getEngineVersionJSON();
 
     bool testRequestsFile();
 
-    bool getConfigData(boost::json::object source);
-
+/**
+ * предустановленные пути к файлам
+ */
     const char* config_file = "..\\config.json";
     const char* requests_file = "..\\requests.json";
     const char* answers_file = "..\\answers.json";
+
+    const char* getPathToConfigFile() const;
+    const char* getPathToRequestFile() const;
+    const char* getPathToAnswersFile() const;
+
+
+    /**
+     * объект для хранения в памяти данных из config.json
+     */
+    boost::json::object configInfo;
+
+    /**
+     * Доступ к сохраненным данным из config.json
+     * @return this->configInfo
+     */
+    boost::json::object &getConfigData ();
+
+    /**
+     * чтение файла config.json и запись результатов в переменную this->configInfo
+     * в случае неудачи, вызывает исключения: ConfigMissEx (отсутствие  файла), ConfigFormatEx (не JSON файл)
+     */
+    void createConfigInfo();
+
+    /**
+     * Проверяет наличие пары key - ["/config"] / value.
+     * value - любое не пустое значение.
+     * При несоответствии ожидаемому вызывает исключение - ConfigEmptyEx
+     */
+    void checkConfigValid();
+
+    /**
+    * проверка соответствия версии программы и config.json
+    * @return true при равенстве версий, иначе false
+    */
+    void checkEngineVersion();
+
 };
 
 #endif //SEARCH_ENGINE_CONVERTERJSON_H

@@ -7,23 +7,28 @@ class ConfigException : public std::exception {
 
 public:
     explicit ConfigException(const char *msg) : std::exception(), ex_msg(msg) {}
-    virtual const char *what() const noexcept override { return ex_msg; }
+    virtual ~ConfigException() noexcept = default;
+    const char *what() const noexcept override { return ex_msg; }
 
 private:
     const char *ex_msg;
 };
 
 
-class ConfigFileMissEx : public ConfigException {
-public: ConfigFileMissEx() : ConfigException("Config file is missing") {}
+class ConfigMissEx : public ConfigException {
+public: ConfigMissEx() : ConfigException("Config file is missing") {}
 };
 
-class ConfigFileEmptyEx : public ConfigException {
-public: ConfigFileEmptyEx() : ConfigException("Config file is empty") {}
+class ConfigEmptyEx : public ConfigException {
+public: ConfigEmptyEx() : ConfigException("Config file is empty") {}
 };
 
-class ConfigInvalidEx : public ConfigException {
-public: ConfigInvalidEx() : ConfigException("Config file has syntax error") {}
+class ConfigFormatEx : public ConfigException {
+public: ConfigFormatEx() : ConfigException("Config file has syntax error") {}
+};
+
+class ConfigVersionEx : public ConfigException {
+public: ConfigVersionEx() : ConfigException("Config.json has incorrect file version") {}
 };
 
 
