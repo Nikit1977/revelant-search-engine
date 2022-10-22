@@ -41,6 +41,8 @@ int main(int argc, char *argv[]) {
 
     int responsesLimit = files_pack.GetResponsesLimit();
 
+    auto req = files_pack.GetRequests();
+
     QApplication a(argc, argv);
     QPushButton button("Hello world!", nullptr);
     button.resize(200, 100);

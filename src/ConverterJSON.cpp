@@ -20,7 +20,13 @@ void ConverterJSON::testConfigFile() {
 
 void ConverterJSON::createConfigInfo() {
 
-    std::ifstream file(getPathToConfigFile());
+    configInfo = readFileJSON(getPathToConfigFile());
+}
+
+boost::json::object ConverterJSON::readFileJSON(const char *name) {
+
+    std::ifstream file(name);
+    boost::json::object result;
     if (file.is_open()) {
         boost::json::stream_parser parser;
         boost::json::error_code ec;
@@ -33,14 +39,16 @@ void ConverterJSON::createConfigInfo() {
         } while (!file.eof());
         file.close();
 
-        if (ec) throw ConfigFormatEx(); //если ошибка
+        if (ec) throw FormatEx(); //если ошибка
 
         parser.finish(ec);
-        if (ec) throw ConfigFormatEx(); //если из прочитанного не сложился json формат
+        if (ec) throw FormatEx(); //если из прочитанного не сложился json формат
 
-        configInfo = parser.release().as_object();
+        result = parser.release().as_object();
 
-    } else throw ConfigMissEx();
+    } else throw FileMissEx();
+
+    return result;
 }
 
 void ConverterJSON::checkConfigValid() {
@@ -52,27 +60,43 @@ void ConverterJSON::checkConfigValid() {
 
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
 
+    std::vector<std::string> files = values_from("files", getConfigData());
+
+    for (auto &it : files) {
+         std::filesystem::path path = it;
+         it = path.make_preferred().string();
+    }
+
+    return files;
+}
+
+std::vector<std::string> ConverterJSON::values_from(const char *key, boost::json::object &source) {
+
     std::vector<std::string> result;
-    if (auto jv = getConfigData().if_contains("files")) {
+    if (auto jv = source.if_contains(key)) {
 
         ///проверка, если ресурсные файлы представлены в виде списка (массива)
         try {
-            auto fileList = jv->as_array(); //если не массив, вызовет исключение
-            for (const auto & it : fileList) {
-                std::filesystem::path path {boost::json::value_to<std::string>(it) };
-                result.push_back(path.make_preferred().string());
+            auto list = jv->as_array(); //если не массив, вызовет исключение
+            for (const auto & it : list) {
+                result.push_back(boost::json::value_to<std::string>(it) );
             }
         }
-        /// или ресурсные файлы представлены в виде одного файла (строки, в том числе пустой)
+            /// или ресурсные файлы представлены в виде одного файла (строки, в том числе пустой)
         catch (std::invalid_argument &ex) {
 
             if (jv->is_string()) {
-                std::filesystem::path path{boost::json::value_to<std::string>(*jv)};
-                result.push_back(path.make_preferred().string());
+                result.push_back(boost::json::value_to<std::string>(*jv));
             }
         }
     }
     return result;
+}
+
+std::vector<std::string> ConverterJSON::GetRequests() {
+
+    auto fileData = readFileJSON(getPathToRequestFile());
+    return values_from("requests", fileData);
 }
 
 void ConverterJSON::checkEngineVersion() {
@@ -87,8 +111,6 @@ const char *ConverterJSON::getEngineVersionJSON() {
     return getConfigData().at("config").at("version").as_string().c_str();
 }
 
-
-
 int ConverterJSON::GetResponsesLimit() {
 
     const int responses_default = 5;
@@ -101,7 +123,6 @@ int ConverterJSON::GetResponsesLimit() {
 
     return (responses > 0 ? responses : responses_default);
 }
-
 
 const char *ConverterJSON::getPathToConfigFile() const {
     return config_file;

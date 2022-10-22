@@ -12,7 +12,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-add_executable(${PROJECT_NAME} main.cpp src/ConverterJSON.cpp src/InvertedIndex.cpp)
+add_executable(${PROJECT_NAME} main.cpp src/InvertedIndex.cpp)
+add_library(converter STATIC src/ConverterJSON.cpp)
 
 #include Boost
 #BOOST_ROOT set as SYSTEM Environment Variable (e.g. C:\Boost_1_80_0)
@@ -36,13 +37,12 @@ target_link_libraries(${PROJECT_NAME}
         Qt5::Widgets
         Boost::system
         Boost::json
+        converter
         )
 
 if (MINGW)
     target_link_libraries(${PROJECT_NAME} ws2_32)
 endif()
-
-add_subdirectory(Google_tests)
 
 if (WIN32)
     set(DEBUG_SUFFIX)
@@ -72,4 +72,4 @@ if (WIN32)
     endforeach (QT_LIB)
 endif ()
 
-
+add_subdirectory(Google_tests)

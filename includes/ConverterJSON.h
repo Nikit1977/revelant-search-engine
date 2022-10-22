@@ -35,6 +35,21 @@ public:
 */
     std::vector<std::string> GetRequests();
 
+    /**
+     * Читает файл формата JSON
+     * @param name имя файла
+     * @return объект в формате JSON
+     * @Exceptions  FileMissEx (отсутствие  файла), FormatEx (не JSON формат)
+     */
+    boost::json::object readFileJSON(const char* name);
+    /**
+     * Формирует список значений по определенному ключу
+     * @param key ключ в паре key/value
+     * @param source исходный объект, в котором осуществляется поиск
+     * @return список значений
+     */
+    std::vector<std::string> values_from(const char* key, boost::json::object &source);
+
 /**
 * Положить в файл answers.json результаты поисковых запросов
 */
@@ -45,8 +60,6 @@ public:
      * Проверка наличия файла config.json, и параметров, требуемых программе (name, version, path и пр.)
      */
     void testConfigFile();
-
-private:
 
     /**
      * Вспомогательный метод. Доступ к версии программы
@@ -69,9 +82,9 @@ private:
     const char* requests_file = "..\\requests.json";
     const char* answers_file = "..\\answers.json";
 
-    const char* getPathToConfigFile() const;
-    const char* getPathToRequestFile() const;
-    const char* getPathToAnswersFile() const;
+    [[nodiscard]] const char* getPathToConfigFile() const;
+    [[nodiscard]] const char* getPathToRequestFile() const;
+    [[nodiscard]] const char* getPathToAnswersFile() const;
 
 
     /**
@@ -87,7 +100,6 @@ private:
 
     /**
      * чтение файла config.json и запись результатов в переменную this->configInfo
-     * в случае неудачи, вызывает исключения: ConfigMissEx (отсутствие  файла), ConfigFormatEx (не JSON файл)
      */
     void createConfigInfo();
 
