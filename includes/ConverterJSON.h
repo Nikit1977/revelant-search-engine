@@ -75,31 +75,23 @@ public:
 
     bool testRequestsFile();
 
-/**
- * предустановленные пути к файлам
- */
-    const char* config_file = "..\\config.json";
-    const char* requests_file = "..\\requests.json";
-    const char* answers_file = "..\\answers.json";
-
     [[nodiscard]] const char* getPathToConfigFile() const;
     [[nodiscard]] const char* getPathToRequestFile() const;
     [[nodiscard]] const char* getPathToAnswersFile() const;
 
-
-    /**
-     * объект для хранения в памяти данных из config.json
-     */
-    boost::json::object configInfo;
+    void setPathToConfigFile(const char* name);
+    void setPathToRequestFile(const char* name);
+    void setPathToAnswersFile(const char* name);
 
     /**
      * Доступ к сохраненным данным из config.json
-     * @return this->configInfo
+     * @return &configInfo
      */
     boost::json::object &getConfigData ();
 
     /**
-     * чтение файла config.json и запись результатов в переменную this->configInfo
+     * чтение файла config.json и запись результатов в переменную configInfo
+     * @param source путь к файлу
      */
     void createConfigInfo();
 
@@ -115,6 +107,19 @@ public:
     * @return true при равенстве версий, иначе false
     */
     void checkEngineVersion();
+
+private:
+    /**
+ * объект для хранения в памяти данных из config.json
+ */
+    boost::json::object configInfo;
+
+    /**
+ * предустановленные пути к файлам
+ */
+    const char* config_file = "..\\config.json";
+    const char* requests_file = "..\\requests.json";
+    const char* answers_file = "..\\answers.json";
 
 };
 

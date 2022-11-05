@@ -1,5 +1,5 @@
-#ifndef SEARCH_ENGINE_CONFIGERROREXCEPTIONS_H
-#define SEARCH_ENGINE_CONFIGERROREXCEPTIONS_H
+#ifndef CONFIGERROREXCEPTIONS_H
+#define CONFIGERROREXCEPTIONS_H
 
 #include <exception>
 
@@ -32,4 +32,4 @@ public: ConfigVersionEx() : ConfigException("Config.json has incorrect file vers
 };
 
 
-#endif //SEARCH_ENGINE_CONFIGERROREXCEPTIONS_H
+#endif //CONFIGERROREXCEPTIONS_H

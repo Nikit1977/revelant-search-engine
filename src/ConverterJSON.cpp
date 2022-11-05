@@ -26,10 +26,10 @@ void ConverterJSON::createConfigInfo() {
 boost::json::object ConverterJSON::readFileJSON(const char *name) {
 
     std::ifstream file(name);
-    boost::json::object result;
+    boost::json::stream_parser parser; //парсер
+
     if (file.is_open()) {
-        boost::json::stream_parser parser;
-        boost::json::error_code ec;
+        boost::json::error_code ec;        //поле для хранения возможной ошибки
         ///читаем из файла кусками по 512 байт
         do {
             char buf[512];
@@ -44,11 +44,9 @@ boost::json::object ConverterJSON::readFileJSON(const char *name) {
         parser.finish(ec);
         if (ec) throw FormatEx(); //если из прочитанного не сложился json формат
 
-        result = parser.release().as_object();
-
     } else throw FileMissEx();
 
-    return result;
+    return parser.release().as_object();
 }
 
 void ConverterJSON::checkConfigValid() {
@@ -100,7 +98,8 @@ std::vector<std::string> ConverterJSON::GetRequests() {
 }
 
 void ConverterJSON::checkEngineVersion() {
-    if (std::strcmp(getEngineVersion(), getEngineVersionJSON()) != 0) throw ConfigVersionEx();
+    if (std::strcmp(getEngineVersion(), getEngineVersionJSON()) != 0)
+        throw ConfigVersionEx();
 }
 
 const char* ConverterJSON::getEngineVersion() {
@@ -134,4 +133,16 @@ const char *ConverterJSON::getPathToRequestFile() const {
 
 const char *ConverterJSON::getPathToAnswersFile() const {
     return answers_file;
+}
+
+void ConverterJSON::setPathToConfigFile(const char *name) {
+    config_file = name;
+}
+
+void ConverterJSON::setPathToRequestFile(const char *name){
+    requests_file = name;
+}
+
+void ConverterJSON::setPathToAnswersFile(const char *name) {
+    answers_file = name;
 }
