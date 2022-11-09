@@ -10,8 +10,6 @@
 #include "version.h"
 
 
-///todo сделать сеттер к предустановленным файлам?
-
 int main(int argc, char *argv[]) {
 
     ConverterJSON files_pack;
@@ -26,18 +24,8 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    auto sourceFiles = files_pack.GetTextDocuments();
-    if (sourceFiles.empty()) return -1;
-
-    for (const auto &item : sourceFiles) {
-        std::ifstream file(item);
-
-        if (file.is_open()) {
-            std::cout << "find file" << std::endl;
-            file.close();
-        }
-    }
-
+    auto rowTexts = files_pack.GetTextDocuments();
+    if (rowTexts.empty()) return -1;
 
     int responsesLimit = files_pack.GetResponsesLimit();
 

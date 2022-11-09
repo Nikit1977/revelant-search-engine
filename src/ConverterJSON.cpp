@@ -58,14 +58,36 @@ void ConverterJSON::checkConfigValid() {
 
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
 
-    std::vector<std::string> files = values_from("files", getConfigData());
+    //получение путей к файлам
+    std::vector<std::string> source_files = values_from("files", getConfigData());
+    std::vector<std::string> target_files;
 
-    for (auto &it : files) {
-         std::filesystem::path path = it;
-         it = path.make_preferred().string();
+    //конвертация путей к файлам с расширением *.txt в нативный для системы формат и запись их в отдельный список
+    for (auto &it : source_files) {
+         std::filesystem::path path(it);
+         if (path.extension() == ".txt") {
+             it = path.make_preferred().string();
+             target_files.push_back(it);
+         }
+    }
+    //вектор текстов
+    std::vector<std::string> texts;
+
+    //заполнение вектора текстов, непосредственно текстом (из списка файлов *.txt)
+    for (auto const& path : target_files) {
+        std::ifstream file(path);
+        if (file.is_open()) {
+            std::string text, result_text;
+            while (!file.eof()) {
+                std::getline(file, text);
+                result_text += text;
+            }
+            file.close();
+            texts.push_back(result_text);
+        }
     }
 
-    return files;
+    return texts;
 }
 
 std::vector<std::string> ConverterJSON::values_from(const char *key, boost::json::object &source) {

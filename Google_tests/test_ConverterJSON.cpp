@@ -13,7 +13,7 @@ TEST(TestConverterClass, Constructor) {
     ASSERT_STREQ("..\\requests.json", convertor.getPathToRequestFile());
     ASSERT_STREQ("..\\answers.json", convertor.getPathToAnswersFile());
 }
-
+//построение тестового файла и назначение его как целевого config.json
 struct ConvertorMethods : public ::testing::Test {
     ConverterJSON convertor;
     const char* temp_file = "temp_json";
@@ -61,53 +61,14 @@ TEST_F(ConvertorMethods, ReadJsonFile_file_is_no_json) {
                  },
                  FormatEx);
 }
-
+//тест записи в поле ConfigInfo корректных данных из тестового файла
 TEST_F(ConvertorMethods, CreateInfo_test_init_configInfo) {
     //Act
     convertor.createConfigInfo(); //создание из тестового файла
     //Assert
     ASSERT_TRUE(example == convertor.getConfigData());
 }
-
-TEST_F(ConvertorMethods, GetTextDocuments_test_count_and_paths) {
-    //Arrange
-    convertor.createConfigInfo();
-    std::vector<std::string> checkList {"..\\resources\\file001.txt", "..\\resources\\file002.txt"};
-
-    //Act
-    auto testList = convertor.GetTextDocuments();
-
-    //Assert
-    ASSERT_TRUE(testList.size() == 2);
-
-    for (int i = 0; i < testList.size(); i++) {
-        ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
-    }
-
-}
-
-TEST_F(ConvertorMethods, GetRequests_count_test) {
-    //Arrange
-    std::vector<std::string> checkList {"mama", "papa"};
-    boost::json::object test_request = { {"requests", boost::json::array{"mama", "papa"}}};
-    std::ofstream file(temp_file, std::ios_base::trunc);
-    if (file.is_open()) {
-        file << test_request;
-        file.close();
-    }
-    convertor.setPathToRequestFile(temp_file);
-
-    //Act
-    auto testList = convertor.GetRequests();
-
-    //Assert
-    ASSERT_TRUE(testList.size() == 2);
-
-    for (int i = 0; i < testList.size(); i++) {
-        ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
-    }
-}
-
+//тест: config.json имеет корректное значение config
 TEST_F(ConvertorMethods, CheckConfigValid_json_has_config_data) {
     //Act
     convertor.createConfigInfo();
@@ -115,6 +76,7 @@ TEST_F(ConvertorMethods, CheckConfigValid_json_has_config_data) {
     EXPECT_NO_THROW({convertor.checkConfigValid();});
 }
 
+//тест: поле config отсутствует в файле
 TEST_F(ConvertorMethods, CheckConfigValid_if_json_has_no_config_data) {
     //Arrange
     boost::json::object invalid_json = {{"no_config", {{"name", "SkillboxSearchEngine"}, {"version", "0.1.2"}}}};
@@ -129,6 +91,7 @@ TEST_F(ConvertorMethods, CheckConfigValid_if_json_has_no_config_data) {
     EXPECT_THROW({convertor.checkConfigValid();}, ConfigEmptyEx);
 }
 
+//тест: ключ config не имеет значений
 TEST_F(ConvertorMethods, CheckConfigValid_if_json_has_empty_config_data) {
     //Arrange
     boost::json::object invalid_json = {{"config", {}}};
@@ -142,7 +105,7 @@ TEST_F(ConvertorMethods, CheckConfigValid_if_json_has_empty_config_data) {
     //Assert
     EXPECT_THROW({convertor.checkConfigValid();}, ConfigEmptyEx);
 }
-
+//получение значений (values) по ключу, если значения являются списком (массивом)
 TEST(helperFunc_valuesFrom, value_is_array) {
     //Arrange
     ConverterJSON convertor;
@@ -158,6 +121,7 @@ TEST(helperFunc_valuesFrom, value_is_array) {
     }
 }
 
+//получение значений (values) по ключу, если значение не является списком (массивом)
 TEST(helperFunc_valuesFrom, value_is_string) {
     //Arrange
     ConverterJSON convertor;
@@ -172,7 +136,36 @@ TEST(helperFunc_valuesFrom, value_is_string) {
         ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
     }
 }
+//тест: извлечение запросов из json файла из ключа - requests
+TEST(GetRequests_test, count_and_eql) {
+    //Arrange
+    //построение тестового файла
+    std::vector<std::string> checkList {"mama", "papa"};
+    boost::json::object test_request = { {"requests", boost::json::array{"mama", "papa"}}};
+    const char* json_file = "temp_json";
+    std::ofstream file(json_file, std::ios_base::trunc);
+    if (file.is_open()) {
+        file << test_request;
+        file.close();
+    }
+    //установка тестового файла в качестве источника файла с запросами
+    ConverterJSON convertor;
+    convertor.setPathToRequestFile(json_file);
 
+    //Act
+    auto testList = convertor.GetRequests();
+
+    //Assert
+    ASSERT_TRUE(testList.size() == 2);
+
+    for (int i = 0; i < testList.size(); i++) {
+        ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
+    }
+}
+
+//тест на извлечение требуемого количества ответов
+
+//построение тестового файла, имеющего ключ max_responses
 struct GetResponsesLimit_count : public ::testing::Test {
     ConverterJSON convertor;
     const char* temp_file = "temp_json";
@@ -187,9 +180,10 @@ struct GetResponsesLimit_count : public ::testing::Test {
 };
 TEST_F(GetResponsesLimit_count, negative) {
     //Arrange
+    //здесь и в последующих тестах - добавление к ключу max_responses значения
     std::ofstream file(temp_file, std::ios_base::app);
     if (file.is_open()) {
-        file << R"(-1}})";
+        file << R"(-1}})"; // отрицательное
         file.close();
     }
     //Act
@@ -203,29 +197,104 @@ TEST_F(GetResponsesLimit_count, positive) {
     //Arrange
     std::ofstream file(temp_file, std::ios_base::app);
     if (file.is_open()) {
-        file << R"(3}})";
+        file << R"(3}})"; //положительное
         file.close();
     }
     //Act
     convertor.createConfigInfo();
-    auto test_response = convertor.GetResponsesLimit();
+    auto test_responses = convertor.GetResponsesLimit();
 
     //Assert
-    ASSERT_EQ(test_response, 3);
+    ASSERT_EQ(test_responses, 3);
 }
 
-/*TEST_F(TestConverter, EngineVersion) {
-    auto ver1 = convertor.getEngineVersionJSON();
-    auto ver2 = convertor.getEngineVersion();
-    EXPECT_FATAL_FAILURE(ASSERT_STRNE(ver1, ver2), "Config file is missing");
+TEST_F(GetResponsesLimit_count, not_num) {
+    //Arrange
+    std::ofstream file(temp_file, std::ios_base::app);
+    if (file.is_open()) {
+        file << R"("nan"}})"; //не число
+        file.close();
+    }
+    //Act
+    convertor.createConfigInfo();
+    auto test_responses = convertor.GetResponsesLimit();
+
+    //Assert
+    ASSERT_EQ(test_responses, 5);
 }
+//построение тестового config файла с путями к текстовым файлам и создание тестовых текстовых файлов
+struct GetTextDocuments_test : public ::testing::Test {
+    ConverterJSON convertor;
+    const char* temp_file = "temp_json";
 
-void ConverterJSON::checkEngineVersion() {
-    if (std::strcmp(getEngineVersion(), getEngineVersionJSON()) != 0) throw ConfigVersionEx();
-}*/
+    void SetUp() {
+        std::ofstream file(temp_file, std::ios_base::trunc);
+        if (file.is_open()) {
+            //заготовка config.json
+            file << R"({"config":{"name":"SkillboxSearchEngine"}, "files": [)";
+            file.close();
+        }
+        std::ofstream text_file01("file001.txt", std::ios_base::trunc);
+        if (text_file01.is_open()) {
+            text_file01 << R"(Text from file001)";
+            text_file01.close();
+        }
+        std::ofstream text_file02("file002.txt", std::ios_base::trunc);
+        if (text_file02.is_open()) {
+            text_file02 << R"(Text from file002)";
+            text_file02.close();
+        }
+        convertor.setPathToConfigFile(temp_file);
+    }
+    std::vector<std::string> checkList {"Text from file001", "Text from file002"};
+};
 
-//Arrange
+TEST_F(GetTextDocuments_test, all_files_is_txt) {
+    //Arrange
+    std::ofstream file(temp_file, std::ios_base::app);
+    if (file.is_open()) {
+        //дозаполнение config.json
+        file << R"("file001.txt", "file002.txt"]})";
+        file.close();
+    }
+    std::cout << "All files are .txt" << std::endl;
 
-//Act
+    convertor.createConfigInfo();
 
-//ASSERT
+    //Act
+    auto testList = convertor.GetTextDocuments();
+
+    //Assert
+    ASSERT_TRUE(testList.size() == 2);
+    std::cout << "count files - OK" << std::endl;
+
+    for (int i = 0; i < testList.size(); i++) {
+        ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
+    }
+    std::cout << "text equal - OK" << std::endl;
+}
+//тест на указание в config.json лишних/случайных файлов, не являющимися .txt, которые должны  быть  проигнорированы
+TEST_F(GetTextDocuments_test, not_all_files_is_txt) {
+    //Arrange
+    std::ofstream file(temp_file, std::ios_base::app);
+    if (file.is_open()) {
+        file << R"("file001.txt", "file003", "file002.txt", "file004.doc"]})";
+        file.close();
+    }
+    std::cout << "Included files are not .txt" << std::endl;
+
+    convertor.createConfigInfo();
+    checkList.emplace_back("Text from other files");
+
+    //Act
+    auto testList = convertor.GetTextDocuments();
+
+    //Assert
+    ASSERT_TRUE(testList.size() == 2);
+    std::cout << "count files - OK" << std::endl;
+
+    for (int i = 0; i < testList.size(); i++) {
+        ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
+    }
+    std::cout << "text equal - OK" << std::endl;
+}
