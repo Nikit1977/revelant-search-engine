@@ -6,9 +6,6 @@
 #include <map>
 #include <string>
 
-
-///После этого этапа получится класс InvertedIndex и структура Entry с таким
-///        интерфейсом:
 struct Entry {
     std::size_t doc_id, count;
 // Данный оператор необходим для проведения тестовых сценариев
@@ -34,6 +31,13 @@ public:
 */
     std::vector<Entry> GetWordCount(const std::string& word);
 private:
+
+    /**
+     * составление списка уникальных слов
+     * @param source текст, в котором осуществляется поиск
+     * @return количество вхождений
+     */
+    std::size_t indexWords(const std::string& source);
     std::vector<std::string> docs; // список содержимого документов
     std::map<std::string, std::vector<Entry>> freq_dictionary; // частотный словарь
 };

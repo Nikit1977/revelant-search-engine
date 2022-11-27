@@ -6,11 +6,6 @@
 #include <filesystem>
 #include <iostream>
 
-
-boost::json::object &ConverterJSON::getConfigData() {
-return configInfo;
-}
-
 void ConverterJSON::testConfigFile() {
 
     createConfigInfo();
@@ -66,24 +61,24 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
     for (auto &it : source_files) {
          std::filesystem::path path(it);
          if (path.extension() == ".txt") {
-             it = path.make_preferred().string();
-             target_files.push_back(it);
+             target_files.push_back(path.make_preferred().string());
          }
     }
     //вектор текстов
     std::vector<std::string> texts;
 
-    //заполнение вектора текстов, непосредственно текстом (из списка файлов *.txt)
+    //заполнение вектора текстов текстами из списка файлов *.txt
     for (auto const& path : target_files) {
+
         std::ifstream file(path);
         if (file.is_open()) {
-            std::string text, result_text;
-            while (!file.eof()) {
-                std::getline(file, text);
-                result_text += text;
-            }
+
+            std::string text;
+            text.reserve(std::filesystem::file_size(path));
+            text.assign(std::istreambuf_iterator<char>(file.rdbuf()), std::istreambuf_iterator<char>());
+
             file.close();
-            texts.push_back(result_text);
+            texts.push_back(text);
         }
     }
 
@@ -143,6 +138,10 @@ int ConverterJSON::GetResponsesLimit() {
     catch (...) {return responses_default;}
 
     return (responses > 0 ? responses : responses_default);
+}
+
+boost::json::object &ConverterJSON::getConfigData() {
+    return configInfo;
 }
 
 const char *ConverterJSON::getPathToConfigFile() const {

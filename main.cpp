@@ -2,10 +2,9 @@
 #include <QPushButton>
 
 #include "ConverterJSON.h"
-
+#include "InvertedIndex.h"
 
 #include <iostream>
-#include <fstream>
 
 #include "version.h"
 
@@ -24,8 +23,10 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    auto rowTexts = files_pack.GetTextDocuments();
-    if (rowTexts.empty()) return -1;
+    InvertedIndex dataBase;
+    dataBase.UpdateDocumentBase(files_pack.GetTextDocuments());
+
+
 
     int responsesLimit = files_pack.GetResponsesLimit();
 

@@ -12,8 +12,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-add_executable(${PROJECT_NAME} main.cpp src/InvertedIndex.cpp)
-add_library(converter STATIC src/ConverterJSON.cpp)
+add_executable(${PROJECT_NAME} main.cpp)
+add_library(converter STATIC src/ConverterJSON.cpp src/InvertedIndex.cpp)
 
 #include Boost
 #BOOST_ROOT set as SYSTEM Environment Variable (e.g. C:\Boost_1_80_0)
