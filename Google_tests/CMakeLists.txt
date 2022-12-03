@@ -4,7 +4,7 @@ project(Google_tests)
 include(FetchContent)
 FetchContent_Declare(
         googletest
-        URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+        URL https://github.com/google/googletest/archive/1f643f71d4151c3b364c0e9302042f7a6debd439.zip
 )
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 

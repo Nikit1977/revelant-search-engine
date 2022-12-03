@@ -61,7 +61,7 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
     for (auto &it : source_files) {
          std::filesystem::path path(it);
          if (path.extension() == ".txt") {
-             target_files.push_back(path.make_preferred().string());
+             target_files.emplace_back(path.make_preferred().string());
          }
     }
     //вектор текстов
@@ -135,6 +135,7 @@ int ConverterJSON::GetResponsesLimit() {
     try {
         responses = (int)getConfigData().at("config").at("max_responses").as_int64();
     }
+    //если не числовой  формат
     catch (...) {return responses_default;}
 
     return (responses > 0 ? responses : responses_default);
