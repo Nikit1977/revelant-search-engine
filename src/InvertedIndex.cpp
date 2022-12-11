@@ -49,14 +49,4 @@ std::size_t InvertedIndex::indexWords(std::size_t id, std::string &source) {
         freq_dictionary[key->first].push_back(key->second);
         key++;
     }
-
-    //печать результата
-    auto it2 = freq_dictionary.begin();
-    while(it2 != freq_dictionary.end()) {
-        std:: cout << it2->first << " ";
-        for (int i = 0; i < it2->second.size(); i++) {
-            std::cout << it2->second[i].doc_id << " " << it2->second[i].count << " ";
-        }
-        it2++;
-    }
 }

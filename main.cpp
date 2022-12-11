@@ -3,6 +3,7 @@
 
 #include "ConverterJSON.h"
 #include "InvertedIndex.h"
+#include "SearchServer.h"
 
 #include <iostream>
 
@@ -24,13 +25,13 @@ int main(int argc, char *argv[]) {
     }
 
     InvertedIndex dataBase;
-    dataBase.UpdateDocumentBase(files_pack.GetTextDocuments());
+    dataBase.UpdateDocumentBase(files_pack.GetTextDocuments());//создание частотного словаря. Текст исходных документов не сохраняется
 
+    SearchServer searchServer(dataBase);
 
-
-    int responsesLimit = files_pack.GetResponsesLimit();
-
-    auto req = files_pack.GetRequests();
+    searchServer.setResponsesLimit(files_pack.GetResponsesLimit());
+    searchServer.setResponsesLimit(5);
+    auto relative = searchServer.search(files_pack.GetRequests());
 
     QApplication a(argc, argv);
     QPushButton button("Hello world!", nullptr);

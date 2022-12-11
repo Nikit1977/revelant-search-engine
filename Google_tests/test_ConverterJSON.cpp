@@ -257,7 +257,6 @@ TEST_F(GetTextDocuments_test, all_files_is_txt) {
         file << R"("file001.txt", "file002.txt"]})";
         file.close();
     }
-    std::cout << "All files are .txt" << std::endl;
 
     convertor.createConfigInfo();
 
@@ -266,12 +265,10 @@ TEST_F(GetTextDocuments_test, all_files_is_txt) {
 
     //Assert
     ASSERT_TRUE(testList.size() == 2);
-    std::cout << "count files - OK" << std::endl;
 
     for (int i = 0; i < testList.size(); i++) {
         ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
     }
-    std::cout << "text equal - OK" << std::endl;
 }
 //тест на указание в config.json лишних/случайных файлов, не являющимися .txt, которые должны  быть  проигнорированы
 TEST_F(GetTextDocuments_test, not_all_files_is_txt) {
@@ -281,7 +278,6 @@ TEST_F(GetTextDocuments_test, not_all_files_is_txt) {
         file << R"("file001.txt", "file003", "file002.txt", "file004.doc"]})";
         file.close();
     }
-    std::cout << "Included files are not .txt" << std::endl;
 
     convertor.createConfigInfo();
     checkList.emplace_back("Text from other files");
@@ -291,10 +287,8 @@ TEST_F(GetTextDocuments_test, not_all_files_is_txt) {
 
     //Assert
     ASSERT_TRUE(testList.size() == 2);
-    std::cout << "count files - OK" << std::endl;
 
     for (int i = 0; i < testList.size(); i++) {
         ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
     }
-    std::cout << "text equal - OK" << std::endl;
 }

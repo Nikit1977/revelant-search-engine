@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 
-project(search_engine VERSION 0.1.4)
+project(search_engine VERSION 0.3.0)
 
 #config version file
 configure_file(includes/version.h.in version.h @ONLY)
@@ -13,7 +13,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 add_executable(${PROJECT_NAME} main.cpp)
-add_library(converter STATIC src/ConverterJSON.cpp src/InvertedIndex.cpp)
+add_library(converter STATIC src/ConverterJSON.cpp src/InvertedIndex.cpp src/SearchServer.cpp includes/SearchServer.h)
 
 #include Boost
 #BOOST_ROOT set as SYSTEM Environment Variable (e.g. C:\Boost_1_80_0)

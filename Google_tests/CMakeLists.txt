@@ -14,7 +14,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 enable_testing()
 
-add_executable(Google_Tests_run test_ConverterJSON.cpp tests_exception.cpp Test_InvertedIndex.cpp)
+add_executable(Google_Tests_run test_ConverterJSON.cpp tests_exception.cpp Test_InvertedIndex.cpp ../src/SearchServer.cpp ../includes/SearchServer.h Test_SearchServer.cpp)
 
 find_package(Boost 1.80.0 REQUIRED COMPONENTS system json)
 include_directories(${Boost_INCLUDE_DIR})
