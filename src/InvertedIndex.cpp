@@ -24,7 +24,7 @@ std::vector<Entry> InvertedIndex::GetWordCount(const std::string &word) {
         return {};
 }
 
-std::size_t InvertedIndex::indexWords(std::size_t id, std::string &source) {
+void InvertedIndex::indexWords(std::size_t id, std::string &source) {
     std::map<std::string,Entry> single_dictionary;
 
     for (char & ch : source) {

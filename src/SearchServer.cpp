@@ -59,7 +59,7 @@ std::vector<RelativeIndex> SearchServer::getRelativeRelevance(std::unordered_set
     std::partial_sort(result.begin(), result.begin() + responses, result.end(),
                       [](const RelativeIndex &lhs, const RelativeIndex &rhs) {
                           if (lhs.rank > rhs.rank) return true; //обратный порядок
-                          if (!(lhs.rank < rhs.rank) && !(lhs.rank > rhs.rank)) return (lhs.doc_id < rhs.doc_id);
+                          if (!(lhs.rank < rhs.rank)) return (lhs.doc_id < rhs.doc_id);
                       });
 
     //модификация (приведение к относительным индексам)

@@ -42,7 +42,7 @@ private:
      * @param source текст, в котором осуществляется поиск
      * @return количество вхождений
      */
-    std::size_t indexWords(std::size_t id, std::string& source);
+    void indexWords(std::size_t id, std::string& source);
     std::vector<std::string> docs; // список содержимого документов
     std::map<std::string, std::vector<Entry>> freq_dictionary; // частотный словарь
 };

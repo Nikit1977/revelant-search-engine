@@ -28,9 +28,8 @@ int main(int argc, char *argv[]) {
     dataBase.UpdateDocumentBase(files_pack.GetTextDocuments());//создание частотного словаря. Текст исходных документов не сохраняется
 
     SearchServer searchServer(dataBase);
-
     searchServer.setResponsesLimit(files_pack.GetResponsesLimit());
-    searchServer.setResponsesLimit(5);
+
     auto relative = searchServer.search(files_pack.GetRequests());
 
     QApplication a(argc, argv);
