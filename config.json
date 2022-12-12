@@ -1,7 +1,7 @@
 {
   "config": {
     "name": "SkillboxSearchEngine",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "last_update": "09.13.2022",
     "update_freq_day": 1,
     "max_responses": 4

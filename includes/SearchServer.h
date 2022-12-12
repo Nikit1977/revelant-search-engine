@@ -11,7 +11,14 @@ struct RelativeIndex{
     RelativeIndex() = default;
     RelativeIndex(std::size_t in_doc_id, float in_rank) : doc_id(in_doc_id), rank(in_rank) {}
 
-
+    /**
+     * приведение к нужному представлению
+     * @return требуемый тип
+     */
+    std::pair<int, float> format() {
+        return std::make_pair((int)doc_id, rank);
+    }
+//todo: если пустой?
     bool operator ==(const RelativeIndex& other) const {
         return (doc_id == other.doc_id && rank == other.rank);
     }
@@ -38,10 +45,16 @@ requests.json
      * Устанавливает количество ответов на запрос
      * @param count количество ответов
      */
-    void setResponsesLimit(int count);
+    void setResponsesLimit(std::size_t count);
+
+    /**
+     * Хелпер-функция - приведение результатов поиска к типу контейнера, согласно ТЗ
+     * @return тип, используемый в ConverterJSON::putAnswers()
+     */
+   static std::vector<std::vector<std::pair<int, float>>> to_format(std::vector<std::vector<RelativeIndex>> &source);
 private:
     InvertedIndex _index;
-    int responses = 5;
+    std::size_t responses = 5;
 /**
  * Формирует список уникальных слов в нижнем регистре без знаков пунктуации
  * @param words строка представляющая отдельный поисковый запрос

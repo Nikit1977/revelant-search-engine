@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 
-project(search_engine VERSION 0.3.0)
+project(search_engine VERSION 0.4.0)
 
 #config version file
 configure_file(includes/version.h.in version.h @ONLY)

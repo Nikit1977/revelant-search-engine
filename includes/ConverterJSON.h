@@ -53,7 +53,14 @@ public:
 /**
 * Положить в файл answers.json результаты поисковых запросов
 */
-    void putAnswers(std::vector<std::vector<std::pair<int, float>>> answers);
+    void putAnswers(std::vector<std::vector<std::pair<int, float>>> &&answers);
+
+    /**
+     * Создание json объекта для последующего вывода
+     * @param answers результаты поиска по документам SearchServer::search()
+     * @return json object
+     */
+    boost::json::object createJSONObject(std::vector<std::vector<std::pair<int, float>>> answers);
 
     /**
      * Вызывает проверочные методы, каждый из которых способен вызвать исключение, не допускающее запуск программы
@@ -72,8 +79,6 @@ public:
      * @return value from - ["config/version"]
      */
     const char *getEngineVersionJSON();
-
-    bool testRequestsFile();
 
     [[nodiscard]] const char* getPathToConfigFile() const;
     [[nodiscard]] const char* getPathToRequestFile() const;

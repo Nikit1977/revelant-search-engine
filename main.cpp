@@ -27,10 +27,12 @@ int main(int argc, char *argv[]) {
     InvertedIndex dataBase;
     dataBase.UpdateDocumentBase(files_pack.GetTextDocuments());//создание частотного словаря. Текст исходных документов не сохраняется
 
-    SearchServer searchServer(dataBase);
+    SearchServer searchServer(dataBase); //подготовка объекта поиска
     searchServer.setResponsesLimit(files_pack.GetResponsesLimit());
+    auto relevanceResult = searchServer.search(files_pack.GetRequests());
 
-    auto relative = searchServer.search(files_pack.GetRequests());
+    //сохранение результатов
+    files_pack.putAnswers(SearchServer::to_format(relevanceResult));
 
     QApplication a(argc, argv);
     QPushButton button("Hello world!", nullptr);

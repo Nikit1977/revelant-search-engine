@@ -107,6 +107,39 @@ std::vector<std::string> ConverterJSON::values_from(const char *key, boost::json
     }
     return result;
 }
+//todo: разобраться с универсальными ссылками
+void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> &&answers) {
+    auto jsonAnswers= createJSONObject(std::move(answers));
+
+    std::ofstream file(getPathToAnswersFile(), std::ios_base::trunc);
+    if (file.is_open()) {
+        file << jsonAnswers;
+        file.close();
+    }
+}
+
+boost::json::object ConverterJSON::createJSONObject(std::vector<std::vector<std::pair<int, float>>> answers) {
+    boost::json::object result_list {{"answers", boost::json::object()}};
+    int docNumber = 0;
+    for (auto & answer : answers) {
+
+        boost::json::object result {{"result", true}};
+
+        if (!answer.empty()) {
+            boost::json::array relev_list;
+            for (auto &relevance: answer) {
+                //todo: ограничить точность числа float
+                boost::json::value jv = {{"docid", relevance.first}, {"rank", relevance.second}};
+                relev_list.emplace_back(jv);
+            }
+            result.insert({{"relevance", std::move(relev_list)}});
+
+        } else result["result"] = false;
+
+        result_list["answers"].as_object().insert({{"request" + std::to_string(docNumber++), std::move(result)}});
+    }
+    return result_list;
+}
 
 std::vector<std::string> ConverterJSON::GetRequests() {
 
