@@ -1,14 +1,11 @@
-#include <QApplication>
-#include <QPushButton>
-
 #include "ConverterJSON.h"
 #include "InvertedIndex.h"
 #include "SearchServer.h"
+#include "ui_engine.h"
 
 #include <iostream>
 
 #include "version.h"
-
 
 int main(int argc, char *argv[]) {
 
@@ -23,20 +20,25 @@ int main(int argc, char *argv[]) {
         std::cerr << ex.what() << std::endl;
         return EXIT_FAILURE;
     }
+    QApplication app(argc, argv);
 
+    //UI interface
+    QMainWindow qMainWindow;
+    Ui::MainWindow uiMain;
+    uiMain.setupUi(&qMainWindow);
+    qMainWindow.show();
+
+    //create freq_dictionary
     InvertedIndex dataBase;
-    dataBase.UpdateDocumentBase(files_pack.GetTextDocuments());//создание частотного словаря. Текст исходных документов не сохраняется
+    dataBase.UpdateDocumentBase(files_pack.GetTextDocuments());
 
-    SearchServer searchServer(dataBase); //подготовка объекта поиска
+    //prepare search objects
+    SearchServer searchServer(dataBase);
     searchServer.setResponsesLimit(files_pack.GetResponsesLimit());
     auto relevanceResult = searchServer.search(files_pack.GetRequests());
 
-    //сохранение результатов
+    //save result
     files_pack.putAnswers(SearchServer::to_format(relevanceResult));
 
-    QApplication a(argc, argv);
-    QPushButton button("Hello world!", nullptr);
-    button.resize(200, 100);
-    button.show();
     return QApplication::exec();
 }

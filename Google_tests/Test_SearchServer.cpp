@@ -25,6 +25,7 @@ SearchServer srv(idx);
 std::vector<std::vector<RelativeIndex>> result = srv.search(request);
 ASSERT_EQ(result, expected);
 }
+
 TEST(TestCaseSearchServer, TestTop5) {
 const std::vector<std::string> docs = {
         "london is the capital of great britain",

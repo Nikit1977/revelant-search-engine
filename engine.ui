@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>634</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(235, 235, 235);</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,0,0,0,0,0,0">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="progressbarLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLabel" name="processName">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="whatsThis">
+         <string notr="true"/>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="text">
+         <string>process</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="processProgressBar">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="value">
+         <number>24</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="textVisible">
+         <bool>false</bool>
+        </property>
+        <property name="format">
+         <string notr="true">%p%</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLineEdit" name="requestInput">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="placeholderText">
+       <string notr="true">input your request</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <layout class="QHBoxLayout" name="infoWindowLayout" stretch="3,1">
+      <item>
+       <layout class="QVBoxLayout" name="resultTextLayout"/>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="rightCommonLayout" stretch="1,2,0">
+        <item>
+         <widget class="QLabel" name="logo">
+          <property name="whatsThis">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Logo</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="emptySpase">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="whatsThis">
+           <string notr="true"/>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <property name="text">
+           <string>Space</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="statisticsLayout" rowstretch="0,0,0,0,0,0,0" columnstretch="0,2,1,0" columnminimumwidth="0,0,0,0">
+          <item row="3" column="2">
+           <widget class="QLabel" name="docsCount">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string notr="true">0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_4">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="whatsThis">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string notr="true">Uniq words in base:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLabel" name="unicWordsCount">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string notr="true">0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="QLabel" name="requestsCount">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string notr="true">0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QLabel" name="label_8">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string notr="true">Statistics:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="whatsThis">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string notr="true">Documents in base:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_6">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="whatsThis">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string notr="true">Requests:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="Line" name="line">
+            <property name="lineWidth">
+             <number>2</number>
+            </property>
+            <property name="midLineWidth">
+             <number>1</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" rowspan="5">
+           <widget class="Line" name="line_12">
+            <property name="lineWidth">
+             <number>2</number>
+            </property>
+            <property name="midLineWidth">
+             <number>1</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="2">
+           <widget class="Line" name="line_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3" rowspan="5">
+           <widget class="Line" name="line_11">
+            <property name="lineWidth">
+             <number>2</number>
+            </property>
+            <property name="midLineWidth">
+             <number>1</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1" colspan="2">
+           <widget class="Line" name="line_4">
+            <property name="lineWidth">
+             <number>2</number>
+            </property>
+            <property name="midLineWidth">
+             <number>1</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(225, 225, 225);</string>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionRecent"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSave_as"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuSetting">
+    <property name="whatsThis">
+     <string notr="true"/>
+    </property>
+    <property name="title">
+     <string>Setting</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="whatsThis">
+     <string notr="true"/>
+    </property>
+    <property name="title">
+     <string>About</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuSetting"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string notr="true">Open</string>
+   </property>
+  </action>
+  <action name="actionRecent">
+   <property name="text">
+    <string notr="true">Recent</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string notr="true">Save</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string notr="true">Save as...</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string notr="true">Close</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string notr="true">Exit</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -13,7 +13,7 @@ struct Entry {
         return (doc_id == other.doc_id &&
                 count == other.count);
     }
-
+//Enry++ возвращает ++Entry.count
     Entry& operator++(int) {
         ++count;
         return *this;
@@ -37,12 +37,6 @@ public:
     std::vector<Entry> GetWordCount(const std::string& word);
 private:
 
-    /**
-     * составление списка уникальных слов
-     * @param source текст, в котором осуществляется поиск
-     * @return количество вхождений
-     */
-    void indexWords(std::size_t id, std::string& source);
     std::vector<std::string> docs; // список содержимого документов
     std::map<std::string, std::vector<Entry>> freq_dictionary; // частотный словарь
 };
