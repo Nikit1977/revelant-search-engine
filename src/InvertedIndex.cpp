@@ -14,6 +14,10 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs) {
         std::cout << "WARNING! The are not \"txt\" files in dataBase." << std::endl;
     } else {
         freq_dictionary.clear();
+        //для тестов отключить многопоточность. При тестировании в многопоточном режиме
+        // не всегда получается получить состоянние ASSERT,
+        // т.к. во frec_dictionary std::map<std::string, std::vector<Entry>>, значения vector<Entry> записываюся
+        //в произвольном порядке по мере выполнения работы потоков, а не последовательно
 #ifdef SINGLE_THREAD
         QThreadPool::globalInstance()->setMaxThreadCount(1);
 #endif

@@ -114,6 +114,15 @@ public:
     void checkEngineVersion();
 
 private:
+
+    //todo
+    /**
+     * Конвертация в удобочитаемый формат
+     * @param target - json объект, являющийся источником
+     * @return текст для вывода на экран или записи в файл
+     */
+    std::string toReadableFormat(boost::json::object &target);
+
     /**
  * объект для хранения в памяти данных из config.json
  */
