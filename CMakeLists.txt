@@ -12,8 +12,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-add_library(${PROJECT_NAME}_lib STATIC src/ConverterJSON.cpp src/InvertedIndex.cpp src/SearchServer.cpp src/TextIndexingTask.cpp)
-add_executable(${PROJECT_NAME}_run main.cpp engine.ui)
+add_library(${PROJECT_NAME}_common STATIC src/ConverterJSON.cpp src/InvertedIndex.cpp src/SearchServer.cpp)
+add_library(${PROJECT_NAME}_mtt src/TextIndexingTask.cpp)
+add_executable(${PROJECT_NAME}_run main.cpp src/MainWindow.cpp src/engine.ui)
 
 #include Boost
 #BOOST_ROOT set as SYSTEM Environment Variable (e.g. C:\Boost_1_80_0)
@@ -32,9 +33,17 @@ include_directories(${Boost_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/includes)
 
 #linking
-target_link_libraries(${PROJECT_NAME}_run PRIVATE ${PROJECT_NAME}_lib)
+target_link_libraries(${PROJECT_NAME}_run PRIVATE ${PROJECT_NAME}_common ${PROJECT_NAME}_mtt)
 
-target_link_libraries(${PROJECT_NAME}_lib PUBLIC
+target_link_libraries(${PROJECT_NAME}_common PUBLIC
+        Qt5::Core
+        Qt5::Gui
+        Qt5::Widgets
+        Qt5::Concurrent
+        Boost::json
+        )
+
+target_link_libraries(${PROJECT_NAME}_mtt PUBLIC
         Qt5::Core
         Qt5::Gui
         Qt5::Widgets

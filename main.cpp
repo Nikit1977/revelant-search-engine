@@ -1,16 +1,18 @@
 #include "ConverterJSON.h"
 #include "InvertedIndex.h"
 #include "SearchServer.h"
-#include "ui_engine.h"
+#include "MainWindow.h"
+#include <QApplication>
 
 #include <iostream>
+#include <chrono>
 
 #include "version.h"
 
 int main(int argc, char *argv[]) {
 
+    //analyse source files
     ConverterJSON files_pack;
-    ///анализ файла config.json
 
     try {
         files_pack.testConfigFile();
@@ -20,17 +22,20 @@ int main(int argc, char *argv[]) {
         std::cerr << ex.what() << std::endl;
         return EXIT_FAILURE;
     }
-    QApplication app(argc, argv);
+
+    QApplication application(argc, argv);
 
     //UI interface
-    QMainWindow qMainWindow;
-    Ui::MainWindow uiMain;
-    uiMain.setupUi(&qMainWindow);
-    qMainWindow.show();
+    MainWindow qWindow(nullptr);
+    qWindow.show();
 
     //create freq_dictionary
     InvertedIndex dataBase;
+    auto start = std::chrono::steady_clock::now();
     dataBase.UpdateDocumentBase(files_pack.GetTextDocuments());
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double, std::milli> elapsed_seconds = end - start;
+    std::cout << "duration " << elapsed_seconds.count() << "ms\n";
 
     //prepare search objects
     SearchServer searchServer(dataBase);

@@ -248,47 +248,4 @@ struct GetTextDocuments_test : public ::testing::Test {
     }
     std::vector<std::string> checkList {"Text from file001", "Text from file002"};
 };
-
-TEST_F(GetTextDocuments_test, all_files_is_txt) {
-    //Arrange
-    std::ofstream file(temp_file, std::ios_base::app);
-    if (file.is_open()) {
-        //дозаполнение config.json
-        file << R"("file001.txt", "file002.txt"]})";
-        file.close();
-    }
-
-    convertor.createConfigInfo();
-
-    //Act
-    auto testList = convertor.GetTextDocuments();
-
-    //Assert
-    ASSERT_TRUE(testList.size() == 2);
-
-    for (int i = 0; i < testList.size(); i++) {
-        ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
-    }
-}
-//тест на указание в config.json лишних/случайных файлов, не являющимися .txt, которые должны  быть  проигнорированы
-TEST_F(GetTextDocuments_test, not_all_files_is_txt) {
-    //Arrange
-    std::ofstream file(temp_file, std::ios_base::app);
-    if (file.is_open()) {
-        file << R"("file001.txt", "file003", "file002.txt", "file004.doc"]})";
-        file.close();
-    }
-
-    convertor.createConfigInfo();
-    checkList.emplace_back("Text from other files");
-
-    //Act
-    auto testList = convertor.GetTextDocuments();
-
-    //Assert
-    ASSERT_TRUE(testList.size() == 2);
-
-    for (int i = 0; i < testList.size(); i++) {
-        ASSERT_STREQ(checkList[i].c_str(), testList[i].c_str());
-    }
-}
+//убрана проверка на расширение *.txt

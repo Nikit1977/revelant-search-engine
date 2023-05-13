@@ -27,7 +27,7 @@ public:
 поиск
 * @param texts_input содержимое документов
 */
-    void UpdateDocumentBase(std::vector<std::string> input_docs);
+    void UpdateDocumentBase(std::vector<std::string> input_texts);
 /**
  * * Метод определяет количество вхождений слова word в загруженной базе
 документов

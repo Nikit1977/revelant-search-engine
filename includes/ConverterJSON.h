@@ -48,7 +48,7 @@ public:
      * @param source исходный объект, в котором осуществляется поиск
      * @return список значений
      */
-    std::vector<std::string> values_from(const char* key, boost::json::object &source);
+    static std::vector<std::string> values_from(const char* key, boost::json::object &source);
 
 /**
 * Положить в файл answers.json результаты поисковых запросов
@@ -121,7 +121,7 @@ private:
      * @param target - json объект, являющийся источником
      * @return текст для вывода на экран или записи в файл
      */
-    std::string toReadableFormat(boost::json::object &target);
+    static std::string toReadableFormat(boost::json::object &target);
 
     /**
  * объект для хранения в памяти данных из config.json

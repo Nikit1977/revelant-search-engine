@@ -7,11 +7,10 @@
 
 #include <QThreadPool>
 
-void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs) {
-    docs = input_docs;
+void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_texts) {
 
-    if (docs.empty()) {
-        std::cout << "WARNING! The are not \"txt\" files in dataBase." << std::endl;
+    if (input_texts.empty()) {
+        std::cout << "WARNING! The are no files in dataBase." << std::endl;
     } else {
         freq_dictionary.clear();
         //для тестов отключить многопоточность. При тестировании в многопоточном режиме
@@ -21,12 +20,13 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs) {
 #ifdef SINGLE_THREAD
         QThreadPool::globalInstance()->setMaxThreadCount(1);
 #endif
-        for (std::size_t i = 0; i < input_docs.size(); i++) { //15ms for single-thread//7ms for multi-thread
-            auto singleTask = new TextIndexingTask(std::ref(docs[i]), std::ref(freq_dictionary), i);
-            QThreadPool::globalInstance()->start(singleTask);
+        for (std::size_t i = 0; i < input_texts.size(); i++) { //15ms for single-thread//7ms for multi-thread
+                                                             //UPD: в релизной версии прироста нет
+            auto singleTask = new TextIndexingTask(std::ref(input_texts[i]), std::ref(freq_dictionary), i);
+            QThreadPool::globalInstance()->start(singleTask);//либо запустит, либо поместит в очередь задач
         }
 
-        //костыль
+        //костыль: ожидание завершения потоков
         while(QThreadPool::globalInstance()->activeThreadCount()) {
         }
 

@@ -50,25 +50,23 @@ void ConverterJSON::checkConfigValid() {
         throw ConfigEmptyEx();
     }
 }
-
+//todo: разбить на два метода
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
 
     //получение путей к файлам
     std::vector<std::string> source_files = values_from("files", getConfigData());
-    std::vector<std::string> target_files;
 
-    //конвертация путей к файлам с расширением *.txt в нативный для системы формат и запись их в отдельный список
+    //конвертация путей к файлам в нативный для системы формат и запись их в отдельный список
     for (auto &it : source_files) {
          std::filesystem::path path(it);
-         if (path.extension() == ".txt") {
-             target_files.emplace_back(path.make_preferred().string());
-         }
+         path.make_preferred().string();
+         it = path.make_preferred().string();
     }
     //вектор текстов
-    std::vector<std::string> texts;
+    std::vector<std::string> row_texts;
 
-    //заполнение вектора текстов текстами из списка файлов *.txt
-    for (auto const& path : target_files) {
+    //заполнение вектора текстов текстами из списка файлов
+    for (auto const& path : source_files) {
 
         std::ifstream file(path);
         if (file.is_open()) {
@@ -78,11 +76,11 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
             text.assign(std::istreambuf_iterator<char>(file.rdbuf()), std::istreambuf_iterator<char>());
 
             file.close();
-            texts.push_back(text);
+            row_texts.push_back(text);
         }
     }
 
-    return texts;
+    return row_texts;
 }
 
 std::vector<std::string> ConverterJSON::values_from(const char *key, boost::json::object &source) {
@@ -120,7 +118,7 @@ void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> &
 
 boost::json::object ConverterJSON::createJSONObject(std::vector<std::vector<std::pair<int, float>>> answers) {
     boost::json::object result_list {{"answers", boost::json::object()}};
-    int docNumber = 0;
+    int docNumber { 0 };
     for (auto & answer : answers) {
 
         boost::json::object result {{"result", true}};
@@ -136,7 +134,7 @@ boost::json::object ConverterJSON::createJSONObject(std::vector<std::vector<std:
 
         } else result["result"] = false;
 
-        result_list["answers"].as_object().insert({{"request" + std::to_string(docNumber++), std::move(result)}});
+        result_list["answers"].as_object().insert({{"request_" + std::to_string(docNumber++), std::move(result)}});
     }
     return result_list;
 }
