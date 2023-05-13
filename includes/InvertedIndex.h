@@ -13,12 +13,8 @@ struct Entry {
         return (doc_id == other.doc_id &&
                 count == other.count);
     }
-//Enry++ возвращает ++Entry.count
-    Entry& operator++(int) {
-        ++count;
-        return *this;
-    }
 };
+
 class InvertedIndex {
 public:
     InvertedIndex() = default;

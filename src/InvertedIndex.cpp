@@ -13,16 +13,13 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_texts) {
         std::cout << "WARNING! The are no files in dataBase." << std::endl;
     } else {
         freq_dictionary.clear();
-        //для тестов отключить многопоточность. При тестировании в многопоточном режиме
-        // не всегда получается получить состоянние ASSERT,
-        // т.к. во frec_dictionary std::map<std::string, std::vector<Entry>>, значения vector<Entry> записываюся
-        //в произвольном порядке по мере выполнения работы потоков, а не последовательно
-#ifdef SINGLE_THREAD
-        QThreadPool::globalInstance()->setMaxThreadCount(1);
-#endif
-        for (std::size_t i = 0; i < input_texts.size(); i++) { //15ms for single-thread//7ms for multi-thread
-                                                             //UPD: в релизной версии прироста нет
-            auto singleTask = new TextIndexingTask(std::ref(input_texts[i]), std::ref(freq_dictionary), i);
+
+        std::size_t dictionaries_count = input_texts.size();
+        std::vector<std::map<std::string, std::size_t>> dict_pack(dictionaries_count); //collection of single dictionaries
+
+        for (std::size_t i = 0; i < dictionaries_count; i++) {
+
+            auto singleTask = new TextIndexingTask(std::ref(input_texts[i]), std::ref(dict_pack[i]));
             QThreadPool::globalInstance()->start(singleTask);//либо запустит, либо поместит в очередь задач
         }
 
@@ -31,6 +28,18 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_texts) {
         }
 
         //connect(..., SIGNAL(result(QString)), SLOT(on_result(QString)));
+
+        //объединения отдельных словарей в общий
+
+        for (std::size_t i = 0; i < dictionaries_count; i++) {
+            auto it = dict_pack[i].begin();
+
+            while (it != dict_pack[i].end()) {
+                Entry value {i, it->second } ;
+                freq_dictionary[it->first].push_back(value);
+                ++it;
+            }
+        }
     }
 }
 

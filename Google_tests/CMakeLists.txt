@@ -17,8 +17,6 @@ set(TESTS_SRC_FILES test_ConverterJSON.cpp tests_exception.cpp Test_InvertedInde
 add_executable(${PROJECT_NAME} ${TESTS_SRC_FILES})
 
 add_library(${PROJECT_NAME}_lib STATIC ../src/ConverterJSON.cpp ../src/InvertedIndex.cpp ../src/SearchServer.cpp ../src/TextIndexingTask.cpp)
-#single-thread for tests
-target_compile_definitions(${PROJECT_NAME}_lib PRIVATE SINGLE_THREAD)
 
 target_link_libraries(${PROJECT_NAME}_lib PUBLIC
         Qt5::Core

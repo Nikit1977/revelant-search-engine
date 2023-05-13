@@ -3,22 +3,20 @@
 #include "InvertedIndex.h"
 
 #include <QRunnable>
-#include <QMutex>
 
 
 class TextIndexingTask : public QRunnable {
 
 public:
 TextIndexingTask() = default;
-TextIndexingTask(std::string &text, std::map<std::string, std::vector<Entry>> &dictionary, std::size_t id);
+TextIndexingTask(std::string &in_text, std::map<std::string, std::size_t> &out_dict);
 
 void run() override;
 
 private:
-    QMutex locker;
-    std::size_t text_id;
-    std::string text;
-    std::map<std::string, std::vector<Entry>> *dict;
+
+    std::string *text;
+    std::map<std::string, std::size_t> *single_dictionary;
 };
 
 
